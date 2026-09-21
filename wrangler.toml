@@ -1,0 +1,8 @@
+name = "26-ty-oral-bid"
+compatibility_date = "2024-09-23"
+workers_dev = false
+account_id = "57df712874237f41c6142eb723be3f21"
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "26-ty-oral-bid-assets"
