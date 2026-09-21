@@ -1,4 +1,5 @@
 import initSqlJs, { type Database, type SqlValue } from 'sql.js'
+import sqlWasmUrl from 'sql.js/dist/sql-wasm.wasm?url'
 import { md5 } from './md5'
 
 export type RoleCode =
@@ -143,10 +144,12 @@ export async function initSqlEngine(): Promise<Database> {
   if (readyPromise) return readyPromise
 
   readyPromise = (async () => {
+    // 通过 Vite 打包同源 wasm；忽略 sql.js 请求的文件名（浏览器构建会要 sql-wasm-browser.wasm）
+    const base = import.meta.env.BASE_URL || '/'
     const SQL = await initSqlJs({
-      locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      locateFile: () => sqlWasmUrl,
     })
-    const response = await fetch('/data/tyoral_database.sqlite')
+    const response = await fetch(`${base}data/tyoral_database.sqlite`)
     if (!response.ok) {
       throw new Error(`无法加载本地 SQLite 数据包: ${response.status}`)
     }
